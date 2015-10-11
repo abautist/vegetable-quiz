@@ -2,12 +2,14 @@ var gameboard = $('.gameboard');
 var header = $('header');
 var playButton = $('#play');
 var blueTeam = $('#choice-one');
+var redTeam = $('#choice-two');
 var blueTeamIcon = "pictures/blue-football-top-md.png";
 var redTeamIcon = "pictures/red-t-shirt-icon-hi.png";
 var playerOneIcon = $('#player1icon');
-var playerTwoIcon = $('player2icon');
+var playerTwoIcon = $('#player2icon');
 //When page loads the title enters from the left
 var count = 0;
+var players = ['X', 'O'];
 
 
 
@@ -23,6 +25,8 @@ $(document).ready(function() {
 
 	// header.hide();
 
+
+
 	playButton.click(function() {
 //tried to hide BV with BV.hide() but didn't work
 		playButton.hide();
@@ -30,25 +34,36 @@ $(document).ready(function() {
 	});
 
 	blueTeam.click(function() {
-		//can't figure out how to make the 'img' more specific
-		count = 0;
-		if (count % 2 === 0) {
+		//can't figure out how to make the 'img' more specific and why the html is '' when i place an image there
+		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
+			return;
+		} else if (playerOneIcon.html() == '') {
 			playerOneIcon.append('<img src="pictures/blue-football-top-md.png" />');
 			$('img').css({'width': '90px', 'height': '73px'});
 		} else {
 			playerTwoIcon.append('<img src="pictures/blue-football-top-md.png" />');
 			$('img').css({'width': '90px', 'height': '73px'});
 		}
-
 	});
 
-	// selectPlayerTwo.click(function() {
+	redTeam.click(function() {
+		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
+			return;
+		} else if (playerOneIcon.html() == '') {
+			playerOneIcon.append('<img src="pictures/red-t-shirt-icon-hi.png" />');
+			$('img').css({'width': '90px', 'height': '73px'});
+		} else {
+			playerTwoIcon.append('<img src="pictures/red-t-shirt-icon-hi.png" />');
+			$('img').css({'width': '90px', 'height': '73px'});
+		}
+	});
 
-	// })
 
-	var turnCount = function () {
-		
-	}
+
+
+	// var turnCount = function () {
+
+	// }
 
 });
 
