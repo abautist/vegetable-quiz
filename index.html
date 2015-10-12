@@ -5,12 +5,8 @@
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
-	<script src="dist/sweetalert.min.js"></script> 
-	<link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
-
-
-<!-- 	// <script src="js/sweetalert.min.js"></script>
-	// <link rel="stylesheet" type="text/css" href="css/sweetalert.css"> -->
+	<script src="js/sweetalert.min.js"></script> 
+	<link rel="stylesheet" type="text/css" href="css/sweetalert.css">
 	<link href="http://vjs.zencdn.net/5.0.0/video-js.css" rel="stylesheet">
 	<title></title>
 </head>
@@ -20,18 +16,22 @@
 		<button id="play">PLAY</button>
 	</div>
 	<div class="gameboard">
-		<div class="choice" id="choice-one">
-			<input type="image" id="blueIcon" src="pictures/blue-football-top-md.png" />
-			<p>BLUE TEAM</p>
+		<div id="firstRd">
+			<button id="rd-1">GO!</button>
+		</div>	
+		<div class="jerseys">
+			<div class="choice" id="choice-one">
+				<input type="image" id="blueIcon" src="pictures/blue-football-top-md.png" />
+				<p>BLUE TEAM</p>
+			</div>
+			<div class="choice" id="choice-two">
+				<input type="image" id="redIcon" src="pictures/red-t-shirt-icon-hi.png" />
+				<p>RED TEAM</p>
+			</div>
 		</div>
-		<div class="choice" id="choice-two">
-			<input type="image" id="redIcon" src="pictures/red-t-shirt-icon-hi.png" />
-			<p>RED TEAM</p>
-		</div>
+		<div class="images"></div>
 	</div>
-	<div>
-		<button id="rd-1">GO!</button>
-	</div>	
+	
 
 
 	<div class="scoreboard">

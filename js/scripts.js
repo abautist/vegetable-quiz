@@ -8,17 +8,54 @@ var redTeamIcon = "pictures/red-t-shirt-icon-hi.png";
 var playerOneIcon = $('#player1icon');
 var playerTwoIcon = $('#player2icon');
 var rdOneButton = $('#rd-1');
-//When page loads the title enters from the left
+var jerseys = $('.jerseys');
 var count = 0;
+var images = $('.images');
+
 var players = ['X', 'O'];
 
-	gameboard.hide();
+var roundOneArray = [
+{photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower'},
+{photo: 'Vegetables/kohlrabi.jpg', answer: 'kohlrabi'},
+{photo: 'Vegetables/artichoke.jpg', answer: 'artichoke'},
+{photo: 'Vegetables/leek.jpg', answer: 'leek'},
+{photo: 'Vegetables/ginger.jpg', answer: 'ginger'},
+{photo: 'Vegetables/savoy-cabbage.jpg', answer: 'cabbage'},
+{photo: 'Vegetables/brussels-sprouts.jpg', answer: 'brussels sprouts'},
+{photo: 'Vegetables/parsnip.jpg', answer: 'parsnip'},
+{photo: 'Vegetables/fennel.jpg', answer: 'fennel'},
+{photo: 'Vegetables/radicchio.jpg', answer: 'radicchio'},
+];
 
+//make sure the photos are all the same size
+
+
+//When page loads the title enters from the left
+//Replace jerseys with colored tags - http://fortawesome.github.io/Font-Awesome/icon/tag/
+//Add select teams text
+
+var displayQuestionOne = function(question, container) {
+	var newDiv = $('<div><h3></h3></div>');
+	newDiv.children('h3').html("NAME THAT VEGETABLE");
+	header.append(newDiv);
+};
+
+// possible add it into an accordian + add progress bar
+// var maxWidth = function (img) {
+// 	console.log("image width: "+img.width());
+// };
+
+// var maxWidth = $('.images img').style({'width': 400});
+
+var item = roundOneArray[Math.floor(Math.random()*roundOneArray.length)];
+
+
+var displayImage = function (img) {
+		images.append('<img src='+item.photo+' />')
+	};
 
 $(document).ready(function() {
 	gameboard.hide();
-	rdOneButton.hide();
-
 	
 
 	// $(function() {
@@ -29,21 +66,27 @@ $(document).ready(function() {
 
 	// header.hide();
 
-
+// set buzz in key
 
 	playButton.click(function() {
 //tried to hide BV with BV.hide() but didn't work
 		playButton.hide();
 		gameboard.show();
+		rdOneButton.attr('disabled', true);			
 	});
 
+	jerseys.click(function() {
+		count++;
+    	console.log(count);
+    	if (count >= 2) {
+    		rdOneButton.removeAttr('disabled');
+    	}
+	});
 
-
-	blueTeam.click(function() {
+	blueTeam.one('click', function() {
 		//can't figure out how to make the 'img' more specific and why the html is '' when i place an image there
 		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
-			rdOneButton.show();
-			return;
+			return;			
 		} else if (playerOneIcon.html() == '') {
 			playerOneIcon.append('<img src="pictures/blue-football-top-md.png" />');
 			$('img').css({'width': '90px', 'height': '73px'});
@@ -53,10 +96,9 @@ $(document).ready(function() {
 		}
 	});
 
-	redTeam.click(function() {
+	redTeam.one('click', function() {
 		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
-			rdOneButton.show();
-			return;
+			return;	
 		} else if (playerOneIcon.html() == '') {
 			playerOneIcon.append('<img src="pictures/red-t-shirt-icon-hi.png" />');
 			$('img').css({'width': '90px', 'height': '73px'});
@@ -66,14 +108,26 @@ $(document).ready(function() {
 		}
 	});
 
+	
+	rdOneButton.click(function() {
+		jerseys.hide();
+		rdOneButton.hide();
+		displayQuestionOne();
+		displayImage();
+	});
 
+});
+
+
+//add text "Please select your team's jersey"
+	
 
 
 	// var turnCount = function () {
 
 	// }
 
-});
+
 
 //Homepage
 
