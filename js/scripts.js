@@ -7,15 +7,19 @@ var blueTeamIcon = "pictures/blue-football-top-md.png";
 var redTeamIcon = "pictures/red-t-shirt-icon-hi.png";
 var playerOneIcon = $('#player1icon');
 var playerTwoIcon = $('#player2icon');
+var rdOneButton = $('#rd-1');
 //When page loads the title enters from the left
 var count = 0;
 var players = ['X', 'O'];
 
-
+	gameboard.hide();
 
 
 $(document).ready(function() {
 	gameboard.hide();
+	rdOneButton.hide();
+
+	
 
 	// $(function() {
  //    	var BV = new $.BigVideo();
@@ -33,9 +37,12 @@ $(document).ready(function() {
 		gameboard.show();
 	});
 
+
+
 	blueTeam.click(function() {
 		//can't figure out how to make the 'img' more specific and why the html is '' when i place an image there
 		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
+			rdOneButton.show();
 			return;
 		} else if (playerOneIcon.html() == '') {
 			playerOneIcon.append('<img src="pictures/blue-football-top-md.png" />');
@@ -48,6 +55,7 @@ $(document).ready(function() {
 
 	redTeam.click(function() {
 		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
+			rdOneButton.show();
 			return;
 		} else if (playerOneIcon.html() == '') {
 			playerOneIcon.append('<img src="pictures/red-t-shirt-icon-hi.png" />');
