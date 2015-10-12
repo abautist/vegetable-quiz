@@ -11,6 +11,9 @@ var rdOneButton = $('#rd-1');
 var jerseys = $('.jerseys');
 var count = 0;
 var images = $('.images');
+var keystroke = $('.keystroke');
+var answerForm = $('#answer');
+var submit = $('.submit');
 
 var players = ['X', 'O'];
 
@@ -27,8 +30,6 @@ var roundOneArray = [
 {photo: 'Vegetables/radicchio.jpg', answer: 'radicchio'},
 ];
 
-//make sure the photos are all the same size
-
 
 //When page loads the title enters from the left
 //Replace jerseys with colored tags - http://fortawesome.github.io/Font-Awesome/icon/tag/
@@ -40,12 +41,12 @@ var displayQuestionOne = function(question, container) {
 	header.append(newDiv);
 };
 
+var nextQuestion = function () {
+	var newDiv = $('<div><h3></h3></div>');
+	newDiv.children('h3').html("Next Question in"+ );
+	header.append(newDiv);
+};
 // possible add it into an accordian + add progress bar
-// var maxWidth = function (img) {
-// 	console.log("image width: "+img.width());
-// };
-
-// var maxWidth = $('.images img').style({'width': 400});
 
 var item = roundOneArray[Math.floor(Math.random()*roundOneArray.length)];
 
@@ -54,9 +55,36 @@ var displayImage = function (img) {
 		images.append('<img src='+item.photo+' />')
 	};
 
+var displayAnswerInput = function () {
+
+}
+
+var showTimer = function () {
+	
+	$('#timer').text(Math.round((new Date - start) / 1000, 0) + " Seconds");
+}
+
+
+
+
 $(document).ready(function() {
 	gameboard.hide();
-	
+	answerForm.hide();
+	keystroke.hide();
+
+	$(document).bind('keydown', function(e) {
+		if (e.keyCode == 81) {
+			answerForm.fadeIn();
+			keystroke.append('<p>PLAYER ONE BUZZED IN!</p>');
+		}
+	});
+
+	$(document).bind('keydown', function(e) {
+		if (e.keyCode == 80) {
+			answerForm.fadeIn();
+			keystroke.append('<p>PLAYER TWO BUZZED IN!</p>');
+		}
+	});
 
 	// $(function() {
  //    	var BV = new $.BigVideo();
@@ -114,6 +142,20 @@ $(document).ready(function() {
 		rdOneButton.hide();
 		displayQuestionOne();
 		displayImage();
+		keystroke.show();
+
+	});
+
+	submit.click(function () {
+		var playerSubmission = submit.val();
+		if (playerSubmission.toLowerCase() == image.name) {
+			alert('CORRECT!');
+			//change to sweet alert
+			//add alternate answer and a you're pretty close alert
+			} else {
+				alert('Sorry, that\'s incorrect');
+			}
+		nextQuestion();
 	});
 
 });
