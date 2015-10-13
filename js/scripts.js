@@ -67,16 +67,25 @@ var displayImage = function (roundCount) {
 	};
 
 var showTimer = function() {
-  var counter = 11;
+  var counter = 6;
   setInterval(function() {
     counter--;
     if (counter >= 0) {
       $('#timer').text(counter);
     }
-    else if (counter === 0) {
-       alert('Time\'s Up!');
-       clearInterval(counter);
+    if (counter === 0) {
        answerForm.hide();
+       plyrOne.html(score1);
+	   plyrTwo.html(score2);
+	   roundCount++;
+	   images.empty();
+	   rdOneButton.text('NEXT');
+	   rdOneButton.show();
+	   buzzedInOne = false;
+	   keystroke.empty();
+	   clearInterval(counter);
+	   alert('Time\'s Up!');
+
     }
     
   }, 1000);
@@ -233,7 +242,7 @@ $(document).ready(function() {
 			plyrTwo.html(score2);
 			roundCount++;
 			alert('CORRECT!');
-			images.hide();
+			images.empty();
 			rdOneButton.text('NEXT');
 			rdOneButton.show();
 
@@ -243,7 +252,7 @@ $(document).ready(function() {
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
 			roundCount++;
-			images.hide();
+			images.empty();
 			rdOneButton.text('NEXT');
 			rdOneButton.show();
 		}
