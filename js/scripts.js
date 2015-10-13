@@ -7,6 +7,7 @@ var blueTeamIcon = "pictures/blue-football-top-md.png";
 var redTeamIcon = "pictures/red-t-shirt-icon-hi.png";
 var playerOneIcon = $('#player1icon');
 var playerTwoIcon = $('#player2icon');
+var buttonSwitch = $('#firstRd');
 var rdOneButton = $('#rd-1');
 var jerseys = $('.jerseys');
 var count = 0;
@@ -22,6 +23,7 @@ var score1 = 0;
 var score2 = 0;
 var oneBuzz = $('#one-buzz');
 var twoBuzz = $('#two-buzz');
+var buzzedInOne = false;
 
 var roundOneArray = [
 {photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower'},
@@ -42,18 +44,6 @@ var roundOneArray = [
 //add text "Please select your team's jersey"
 // possible add it into an accordian + add progress bar
 
-var displayQuestionOne = function(question, container) {
-	var newDiv = $('<div><h3></h3></div>');
-	newDiv.children('h3').html("NAME THAT VEGETABLE");
-	header.append(newDiv);
-};
-
-// var nextQuestion = function () {
-// 	var newDiv = $('<div><h3></h3></div>');
-// 	newDiv.children('h3').html("Next Question in"+ );
-// 	header.append(newDiv);
-// };
-
 //Shuffle the tiles using the Fisher-Yates method
 
 var shuffle = function (array) {
@@ -72,12 +62,9 @@ var shuffle = function (array) {
 
 var displayImage = function (roundCount) {
 // add loop to the shuffled array
+		
 		images.append('<img src='+roundOneArray[roundCount].photo+' />');
 	};
-
-// var displayAnswerInput = function () {
-
-// }
 
 var showTimer = function() {
   var counter = 11;
@@ -96,12 +83,31 @@ var showTimer = function() {
     
 };
 
-//score function
-// var points = function (plyrOne, plyrTwo, roundCount) {
-// 	if (playerSubmission.toLowerCase() == roundOneArray[roundCount].answer && oneBuzz.text('PLAYER ONE BUZZED IN!')) {
-// 		return score1++;
-// 	} else if (playerSubmission.toLowerCase() == roundOneArray[roundCount].answer && twoBuzz.text('PLAYER TWO BUZZED IN!')) {
-// 		return score2++; 	
+//determine winner
+var winner = function(score1,score2) {
+	if (score1 === 3) {
+			swal({   title: 'Player 1 is the winner!',
+			text: "XXX"})
+	} else if (score2 === 3) {
+			swal({   title: 'Player 2 is the winner!',
+			text: "XXX"});
+	} else {
+		return;
+	}
+	reset();
+};
+
+var reset = function () {
+	shuffle(roundOneArray);
+	console.log(roundOneArray);
+	gameboard.hide();
+	answerForm.hide();
+	keystroke.hide();
+	plyrOne.html(score1);
+	plyrTwo.html(score2);
+	playButton.show();
+};
+
 
 $(document).ready(function() {
 	shuffle(roundOneArray);
@@ -114,18 +120,23 @@ $(document).ready(function() {
 	
 
 	$(document).bind('keydown', function(e) {
-		if (e.keyCode == 81) {
+		if (e.keyCode == 81 && buzzedInOne == false) {
+			buzzedInOne = true;
 			answerForm.fadeIn();
+			// keystroke.empty();
 			keystroke.append('<p id="one-buzz">PLAYER ONE BUZZED IN!</p>');
 		}
 	});
 
 	$(document).bind('keydown', function(e) {
-		if (e.keyCode == 80) {
+		if (e.keyCode == 80 && buzzedInOne == false) {
+			buzzedInOne = true;
 			answerForm.fadeIn();
+			// keystroke.empty();
 			keystroke.append('<p id="two-buzz">PLAYER TWO BUZZED IN!</p>');
 		}
 	});
+	
 
 	//make sure you can't activate p buzzer when typing in answer
 
@@ -149,6 +160,8 @@ $(document).ready(function() {
     	console.log(count);
     	if (count >= 2) {
     		rdOneButton.removeAttr('disabled');
+    		jerseys.hide();
+//set delay for jersey hide - buggy - will hide
     	}
 	});
 
@@ -179,47 +192,64 @@ $(document).ready(function() {
 
 	
 	rdOneButton.click(function() {
-		jerseys.hide();
 		rdOneButton.hide();
-		displayQuestionOne();
 		displayImage(roundCount);
 		keystroke.show();
 		showTimer();
-
-
 	});
+
+	// nextRound.click(function() {
+
+	// })
 
 
 //set the value of the typedGuess - typedGuess.val('') is messing up the function
 
-	submit.click(function () {
+	submit.click(function (event) {
+		event.preventDefault();
+		buzzedInOne = false;
+		keystroke.empty();
 		var playerSubmission = typedGuess.val();
 		// if (typedGuess.val('')) {
 		// 	alert('You have to enter something!')
 		// } else 
 
-		if (playerSubmission.toLowerCase(roundOneArray[roundCount].answer) && oneBuzz.html('PLAYER ONE BUZZED IN!')) {
+		if (playerSubmission.toLowerCase() == roundOneArray[roundCount].answer && oneBuzz.html('PLAYER ONE BUZZED IN!')) {
 			console.log('true');
-			alert('CORRECT!');
+			
 			score1++;
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
 			roundCount++;
+			alert('CORRECT!');
+			images.empty();
+			rdOneButton.text('NEXT');
+			rdOneButton.show();
 			//change to sweet alert
 			//add alternate answer and a you're pretty close alert
-		} else if (playerSubmission.toLowerCase(roundOneArray[roundCount].answer) && twoBuzz.html('PLAYER TWO BUZZED IN!')) {
-			alert('CORRECT!');
+		} else if (playerSubmission.toLowerCase() == roundOneArray[roundCount].answer && twoBuzz.html('PLAYER TWO BUZZED IN!')) {
 			score2++;
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
 			roundCount++;
+			alert('CORRECT!');
+			images.hide();
+			rdOneButton.text('NEXT');
+			rdOneButton.show();
+
 		} else {
 			console.log('false');
 			alert('Sorry, that\'s incorrect');
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
 			roundCount++;
+			images.hide();
+			rdOneButton.text('NEXT');
+			rdOneButton.show();
 		}
+	
+		winner(score1, score2);		
+
 	});
 
 });
