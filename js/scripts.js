@@ -13,8 +13,15 @@ var count = 0;
 var images = $('.images');
 var keystroke = $('.keystroke');
 var answerForm = $('#answer');
-var submit = $('.submit');
+var submit = $('.submit'); 
+var typedGuess = $('#rd-1-ans');
 var roundCount = 0;
+var plyrOne = $('#player1score');
+var plyrTwo = $('#player2score');
+var score1 = 0;
+var score2 = 0;
+var oneBuzz = $('#one-buzz');
+var twoBuzz = $('#two-buzz');
 
 var roundOneArray = [
 {photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower'},
@@ -32,7 +39,7 @@ var roundOneArray = [
 
 //When page loads the title enters from the left
 //Replace jerseys with colored tags - http://fortawesome.github.io/Font-Awesome/icon/tag/
-//Add select teams text
+//add text "Please select your team's jersey"
 // possible add it into an accordian + add progress bar
 
 var displayQuestionOne = function(question, container) {
@@ -65,9 +72,7 @@ var shuffle = function (array) {
 
 var displayImage = function (roundCount) {
 // add loop to the shuffled array
-		console.log(roundOneArray[0].photo);
 		images.append('<img src='+roundOneArray[roundCount].photo+' />');
-		roundCount++;	
 	};
 
 // var displayAnswerInput = function () {
@@ -90,8 +95,13 @@ var showTimer = function() {
   }, 1000);
     
 };
-  
 
+//score function
+// var points = function (plyrOne, plyrTwo, roundCount) {
+// 	if (playerSubmission.toLowerCase() == roundOneArray[roundCount].answer && oneBuzz.text('PLAYER ONE BUZZED IN!')) {
+// 		return score1++;
+// 	} else if (playerSubmission.toLowerCase() == roundOneArray[roundCount].answer && twoBuzz.text('PLAYER TWO BUZZED IN!')) {
+// 		return score2++; 	
 
 $(document).ready(function() {
 	shuffle(roundOneArray);
@@ -99,21 +109,25 @@ $(document).ready(function() {
 	gameboard.hide();
 	answerForm.hide();
 	keystroke.hide();
+	plyrOne.html(score1);
+	plyrTwo.html(score2);
 	
 
 	$(document).bind('keydown', function(e) {
 		if (e.keyCode == 81) {
 			answerForm.fadeIn();
-			keystroke.append('<p>PLAYER ONE BUZZED IN!</p>');
+			keystroke.append('<p id="one-buzz">PLAYER ONE BUZZED IN!</p>');
 		}
 	});
 
 	$(document).bind('keydown', function(e) {
 		if (e.keyCode == 80) {
 			answerForm.fadeIn();
-			keystroke.append('<p>PLAYER TWO BUZZED IN!</p>');
+			keystroke.append('<p id="two-buzz">PLAYER TWO BUZZED IN!</p>');
 		}
 	});
+
+	//make sure you can't activate p buzzer when typing in answer
 
 	// $(function() {
  //    	var BV = new $.BigVideo();
@@ -122,8 +136,6 @@ $(document).ready(function() {
 	// });
 
 	// header.hide();
-
-// set buzz in key
 
 	playButton.click(function() {
 //tried to hide BV with BV.hide() but didn't work
@@ -177,64 +189,45 @@ $(document).ready(function() {
 
 	});
 
+
+//set the value of the typedGuess - typedGuess.val('') is messing up the function
+
 	submit.click(function () {
-		var playerSubmission = submit.val();
-		if (playerSubmission.toLowerCase() == roundOneArray[roundCount].name) {
+		var playerSubmission = typedGuess.val();
+		// if (typedGuess.val('')) {
+		// 	alert('You have to enter something!')
+		// } else 
+
+		if (playerSubmission.toLowerCase(roundOneArray[roundCount].answer) && oneBuzz.html('PLAYER ONE BUZZED IN!')) {
+			console.log('true');
 			alert('CORRECT!');
+			score1++;
+			plyrOne.html(score1);
+			plyrTwo.html(score2);
+			roundCount++;
 			//change to sweet alert
 			//add alternate answer and a you're pretty close alert
-			} else {
-				alert('Sorry, that\'s incorrect');
-			}
-		displayImage(roundCount);
+		} else if (playerSubmission.toLowerCase(roundOneArray[roundCount].answer) && twoBuzz.html('PLAYER TWO BUZZED IN!')) {
+			alert('CORRECT!');
+			score2++;
+			plyrOne.html(score1);
+			plyrTwo.html(score2);
+			roundCount++;
+		} else {
+			console.log('false');
+			alert('Sorry, that\'s incorrect');
+			plyrOne.html(score1);
+			plyrTwo.html(score2);
+			roundCount++;
+		}
 	});
 
 });
 
 
-//add text "Please select your team's jersey"
-	
-
-
-	// var turnCount = function () {
-
-	// }
-
-
-
-//Homepage
-
-
-// Hide team selector div
-// Hide round 1 div
-// hide scoreboard div
-
-
-
 //Host appears with speech bubble with div inside. Please choose your team! Host and speech bubble hides
 
-/*Div appears with two sweater images - choose your team - use thumbnail option
-First click determines player 1 - change player 1's scoreboard icon to the respective shirt color;
-2nd player is the other color shirt
-
-prompt ready button()
-	Hide Team selector div
-	Show round 1 div + image + question header
-	Show buzzer divs
-
-/show round 1 div function
-	on initial ready button click activates round 1 div function -
-		pulls image from array 
-		mathRandom to show it
-
-
-
-		[{photo: .img, name: XX},
-		 {photo: .img, name: XX},
-		 {photo: .img, name: XX},
-		 {photo: .img, name: XX}]
-		 
-		 }
+/*
 
 /buzzer function
 	onclick -
