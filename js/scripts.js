@@ -14,8 +14,7 @@ var images = $('.images');
 var keystroke = $('.keystroke');
 var answerForm = $('#answer');
 var submit = $('.submit');
-
-var players = ['X', 'O'];
+var roundCount = 0;
 
 var roundOneArray = [
 {photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower'},
@@ -34,6 +33,7 @@ var roundOneArray = [
 //When page loads the title enters from the left
 //Replace jerseys with colored tags - http://fortawesome.github.io/Font-Awesome/icon/tag/
 //Add select teams text
+// possible add it into an accordian + add progress bar
 
 var displayQuestionOne = function(question, container) {
 	var newDiv = $('<div><h3></h3></div>');
@@ -41,36 +41,65 @@ var displayQuestionOne = function(question, container) {
 	header.append(newDiv);
 };
 
-var nextQuestion = function () {
-	var newDiv = $('<div><h3></h3></div>');
-	newDiv.children('h3').html("Next Question in"+ );
-	header.append(newDiv);
-};
-// possible add it into an accordian + add progress bar
+// var nextQuestion = function () {
+// 	var newDiv = $('<div><h3></h3></div>');
+// 	newDiv.children('h3').html("Next Question in"+ );
+// 	header.append(newDiv);
+// };
 
-var item = roundOneArray[Math.floor(Math.random()*roundOneArray.length)];
+//Shuffle the tiles using the Fisher-Yates method
 
+var shuffle = function (array) {
+	var currentIndex = array.length, temporaryValue, randomIndex;
 
-var displayImage = function (img) {
-		images.append('<img src='+item.photo+' />')
+	while (0 !== currentIndex) {
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+	return array;
+}
+
+var displayImage = function (roundCount) {
+// add loop to the shuffled array
+		console.log(roundOneArray[0].photo);
+		images.append('<img src='+roundOneArray[roundCount].photo+' />');
+		roundCount++;	
 	};
 
-var displayAnswerInput = function () {
+// var displayAnswerInput = function () {
 
-}
+// }
 
-var showTimer = function () {
-	
-	$('#timer').text(Math.round((new Date - start) / 1000, 0) + " Seconds");
-}
-
-
+var showTimer = function() {
+  var counter = 11;
+  setInterval(function() {
+    counter--;
+    if (counter >= 0) {
+      $('#timer').text(counter);
+    }
+    else if (counter === 0) {
+       alert('Time\'s Up!');
+       clearInterval(counter);
+       answerForm.hide();
+    }
+    
+  }, 1000);
+    
+};
+  
 
 
 $(document).ready(function() {
+	shuffle(roundOneArray);
+	console.log(roundOneArray);
 	gameboard.hide();
 	answerForm.hide();
 	keystroke.hide();
+	
 
 	$(document).bind('keydown', function(e) {
 		if (e.keyCode == 81) {
@@ -100,7 +129,7 @@ $(document).ready(function() {
 //tried to hide BV with BV.hide() but didn't work
 		playButton.hide();
 		gameboard.show();
-		rdOneButton.attr('disabled', true);			
+		rdOneButton.attr('disabled', true);	
 	});
 
 	jerseys.click(function() {
@@ -141,21 +170,23 @@ $(document).ready(function() {
 		jerseys.hide();
 		rdOneButton.hide();
 		displayQuestionOne();
-		displayImage();
+		displayImage(roundCount);
 		keystroke.show();
+		showTimer();
+
 
 	});
 
 	submit.click(function () {
 		var playerSubmission = submit.val();
-		if (playerSubmission.toLowerCase() == image.name) {
+		if (playerSubmission.toLowerCase() == roundOneArray[roundCount].name) {
 			alert('CORRECT!');
 			//change to sweet alert
 			//add alternate answer and a you're pretty close alert
 			} else {
 				alert('Sorry, that\'s incorrect');
 			}
-		nextQuestion();
+		displayImage(roundCount);
 	});
 
 });
