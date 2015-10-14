@@ -1,5 +1,6 @@
 var gameboard = $('.gameboard');
 var header = $('header');
+var h1 = $('#h1-hd');
 var playButton = $('#play');
 var blueTeam = $('#choice-one');
 var redTeam = $('#choice-two');
@@ -24,18 +25,26 @@ var score2 = 0;
 var oneBuzz = $('#one-buzz');
 var twoBuzz = $('#two-buzz');
 var buzzedInOne = false;
+var scoreBoard = $('.scoreboard');
 
 var roundOneArray = [
 {photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower'},
 {photo: 'Vegetables/kohlrabi.jpg', answer: 'kohlrabi'},
 {photo: 'Vegetables/artichoke.jpg', answer: 'artichoke'},
-{photo: 'Vegetables/leek.jpg', answer: 'leek'},
+{photo: 'Vegetables/garlic.jpg', answer: 'garlic'},
 {photo: 'Vegetables/ginger.jpg', answer: 'ginger'},
 {photo: 'Vegetables/savoy-cabbage.jpg', answer: 'cabbage'},
 {photo: 'Vegetables/brussels-sprouts.jpg', answer: 'brussels sprouts'},
 {photo: 'Vegetables/parsnip.jpg', answer: 'parsnip'},
 {photo: 'Vegetables/fennel.jpg', answer: 'fennel'},
 {photo: 'Vegetables/radicchio.jpg', answer: 'radicchio'},
+{photo: 'Vegetables/asparagus.jpg', answer: 'asparagus'},
+{photo: 'Vegetables/kale.jpg', answer: 'kale'},
+{photo: 'Vegetables/tomatoes.jpg', answer: 'tomato'},
+{photo: 'Vegetables/basil.jpg', answer: 'basil'},
+{photo: 'Vegetables/onions.jpg', answer: 'onion'},
+{photo: 'Vegetables/carrot.jpg', answer: 'carrot'},
+{photo: 'Vegetables/broccoli.jpg', answer: 'broccoli'},
 ];
 
 
@@ -63,17 +72,24 @@ var shuffle = function (array) {
 var displayImage = function (roundCount) {
 // add loop to the shuffled array
 		
-		images.append('<img src='+roundOneArray[roundCount].photo+' />');
+		images.append('<img class="img-rd-1" src='+roundOneArray[roundCount].photo+' />');
 	};
 
 var showTimer = function() {
-  var counter = 6;
+  var counter = 41;
+// above doesn't work and timer stops at 5 seconds - still need to fix the buzzer
+
   setInterval(function() {
     counter--;
-    if (counter >= 0) {
-      $('#timer').text(counter);
+    if (counter > 0) {
+      $('#timer').text('00:'+counter);
     }
+    // // if (counter > 0 && oneBuzz.html('PLAYER ONE BUZZED IN!')) {
+    // //   clearInterval(counter);
+
+    // }
     if (counter === 0) {
+       $('#timer').css({'color':'red'});
        answerForm.hide();
        plyrOne.html(score1);
 	   plyrTwo.html(score2);
@@ -123,7 +139,7 @@ $(document).ready(function() {
 	console.log(roundOneArray);
 	gameboard.hide();
 	answerForm.hide();
-	keystroke.hide();
+	scoreBoard.hide();
 	plyrOne.html(score1);
 	plyrTwo.html(score2);
 	
@@ -147,6 +163,7 @@ $(document).ready(function() {
 	});
 	
 
+
 	//make sure you can't activate p buzzer when typing in answer
 
 	// $(function() {
@@ -160,18 +177,17 @@ $(document).ready(function() {
 	playButton.click(function() {
 //tried to hide BV with BV.hide() but didn't work
 		playButton.hide();
-		gameboard.show();
-		rdOneButton.attr('disabled', true);	
+		gameboard.fadeIn();
+		scoreBoard.fadeIn();
+		rdOneButton.hide();
 	});
 
 	jerseys.click(function() {
-		count++;
-    	console.log(count);
-    	if (count >= 2) {
-    		rdOneButton.removeAttr('disabled');
-    		jerseys.hide();
+		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
+    		// jerseys.hide();
+    		rdOneButton.fadeIn('slow');
+		}
 //set delay for jersey hide - buggy - will hide
-    	}
 	});
 
 	blueTeam.one('click', function() {
@@ -179,11 +195,11 @@ $(document).ready(function() {
 		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
 			return;			
 		} else if (playerOneIcon.html() == '') {
-			playerOneIcon.append('<img src="pictures/blue-football-top-md.png" />');
-			$('img').css({'width': '90px', 'height': '73px'});
+			playerOneIcon.append('<img src="pictures/blue.png" />');
+			$('img').css({'width': '50px', 'height': '50px'});
 		} else {
-			playerTwoIcon.append('<img src="pictures/blue-football-top-md.png" />');
-			$('img').css({'width': '90px', 'height': '73px'});
+			playerTwoIcon.append('<img src="pictures/blue.png" />');
+			$('img').css({'width': '50px', 'height': '50px'});
 		}
 	});
 
@@ -191,17 +207,19 @@ $(document).ready(function() {
 		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
 			return;	
 		} else if (playerOneIcon.html() == '') {
-			playerOneIcon.append('<img src="pictures/red-t-shirt-icon-hi.png" />');
-			$('img').css({'width': '90px', 'height': '73px'});
+			playerOneIcon.append('<img src="pictures/red.png" />');
+			$('img').css({'width': '50px', 'height': '50px'});
 		} else {
-			playerTwoIcon.append('<img src="pictures/red-t-shirt-icon-hi.png" />');
-			$('img').css({'width': '90px', 'height': '73px'});
+			playerTwoIcon.append('<img src="pictures/red.png" />');
+			$('img').css({'width': '50px', 'height': '50px'});
 		}
 	});
 
 	
 	rdOneButton.click(function() {
+		$('#timer').css({'color':'white'});
 		rdOneButton.hide();
+		jerseys.hide();
 		displayImage(roundCount);
 		keystroke.show();
 		showTimer();
