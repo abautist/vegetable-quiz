@@ -152,7 +152,7 @@ header {
 	max-height: 420px
 }
 
-.keystroke {
+#one-buzz {
 	text-align: center;
 	font-size: 80px;
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;

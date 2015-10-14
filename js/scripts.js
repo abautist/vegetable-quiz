@@ -27,6 +27,8 @@ var twoBuzz = $('#two-buzz');
 var buzzedInOne = false;
 var scoreBoard = $('.scoreboard');
 var answerInput = $('.answerInput');
+var counterInterval;
+
 
 var roundOneArray = [
 {photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower'},
@@ -70,27 +72,29 @@ var shuffle = function (array) {
 	return array;
 }
 
-var displayImage = function (roundCount) {
-// add loop to the shuffled array
-		
+var displayImage = function (roundCount) {		
 		images.append('<img class="img-rd-1" src='+roundOneArray[roundCount].photo+' />');
 	};
 
 var showTimer = function() {
-  var counter = 41;
-// above doesn't work and timer stops at 5 seconds - still need to fix the buzzer
-
-  setInterval(function() {
+  var counter = 21;
+  
+  counterInterval = setInterval(function() {
     counter--;
-    if (counter > 0) {
+    if (counter >= 10) {
       $('#timer').text('00:'+counter);
+    }
+    if (counter >= 0 && counter < 10) {
+      $('#timer').text('00:0'+counter);
+    }
+    if (counter <= 5) {
+      $('#timer').css({'color':'red'});
     }
     // // if (counter > 0 && oneBuzz.html('PLAYER ONE BUZZED IN!')) {
     // //   clearInterval(counter);
 
     // }
     if (counter === 0) {
-       $('#timer').css({'color':'red'});
        answerForm.hide();
        plyrOne.html(score1);
 	   plyrTwo.html(score2);
@@ -99,8 +103,8 @@ var showTimer = function() {
 	   rdOneButton.text('NEXT');
 	   rdOneButton.show();
 	   buzzedInOne = false;
-	   keystroke.empty();
-	   clearInterval(counter);
+	   oneBuzz.empty();
+	   clearInterval(counterInterval);
 	   alert('Time\'s Up!');
 
     }
@@ -120,21 +124,20 @@ var winner = function(score1,score2) {
 	} else {
 		return;
 	}
-	reset();
+	resetGame();
 };
 
-var reset = function () {
+var resetGame = function () {
 	shuffle(roundOneArray);
 	console.log(roundOneArray);
 	gameboard.hide();
 	answerForm.hide();
 	keystroke.hide();
-	answerInput.hide();
+	answerForm.hide();
 	plyrOne.html(score1);
 	plyrTwo.html(score2);
 	playButton.show();
 };
-
 
 $(document).ready(function() {
 	shuffle(roundOneArray);
@@ -148,19 +151,21 @@ $(document).ready(function() {
 
 	$(document).bind('keydown', function(e) {
 		if (e.keyCode == 81 && buzzedInOne == false) {
+			e.preventDefault();
 			buzzedInOne = true;
 			answerForm.fadeIn();
-			// keystroke.empty();
-			keystroke.append('<p id="one-buzz">PLAYER ONE BUZZED IN!</p>');
+			typedGuess.focus();
+			oneBuzz.text('PLAYER ONE BUZZED IN!');
 		}
 	});
 
 	$(document).bind('keydown', function(e) {
 		if (e.keyCode == 80 && buzzedInOne == false) {
+			e.preventDefault();
 			buzzedInOne = true;
 			answerForm.fadeIn();
-			// keystroke.empty();
-			keystroke.append('<p id="two-buzz">PLAYER TWO BUZZED IN!</p>');
+			typedGuess.focus();
+			oneBuzz.text('PLAYER TWO BUZZED IN!');
 		}
 	});
 	
@@ -224,7 +229,7 @@ $(document).ready(function() {
 		jerseys.hide();
 		displayImage(roundCount);
 		keystroke.show();
-		answerInput.show();
+
 		showTimer();
 	});
 
@@ -236,18 +241,18 @@ $(document).ready(function() {
 //set the value of the typedGuess - typedGuess.val('') is messing up the function
 
 	submit.click(function (event) {
+		clearInterval(counterInterval);
 		event.preventDefault();
 		buzzedInOne = false;
-		keystroke.empty();
-		answerInput.hide();
+		answerForm.hide();
 		var playerSubmission = typedGuess.val();
+		typedGuess.val('');
 		// if (typedGuess.val('')) {
 		// 	alert('You have to enter something!')
 		// } else 
 
-		if (playerSubmission.toLowerCase() == roundOneArray[roundCount].answer && oneBuzz.html('PLAYER ONE BUZZED IN!')) {
+		if (playerSubmission.toLowerCase() === roundOneArray[roundCount].answer && oneBuzz.text() === 'PLAYER ONE BUZZED IN!') {
 			console.log('true');
-			
 			score1++;
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
@@ -256,9 +261,9 @@ $(document).ready(function() {
 			images.empty();
 			rdOneButton.text('NEXT');
 			rdOneButton.show();
-			//change to sweet alert
-			//add alternate answer and a you're pretty close alert
-		} else if (playerSubmission.toLowerCase() == roundOneArray[roundCount].answer && twoBuzz.html('PLAYER TWO BUZZED IN!')) {
+
+		} else if (playerSubmission.toLowerCase() === roundOneArray[roundCount].answer && oneBuzz.text() === 'PLAYER TWO BUZZED IN!') {
+			console.log('player2')
 			score2++;
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
@@ -267,6 +272,9 @@ $(document).ready(function() {
 			images.empty();
 			rdOneButton.text('NEXT');
 			rdOneButton.show();
+
+			//change to sweet alert
+			//add alternate answer and a you're pretty close alert
 
 		} else {
 			console.log('false');
@@ -279,7 +287,8 @@ $(document).ready(function() {
 			rdOneButton.show();
 		}
 	
-		winner(score1, score2);		
+		winner(score1, score2);
+		oneBuzz.empty();		
 
 	});
 
