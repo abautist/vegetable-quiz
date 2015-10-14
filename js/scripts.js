@@ -28,6 +28,7 @@ var buzzedInOne = false;
 var scoreBoard = $('.scoreboard');
 var answerInput = $('.answerInput');
 var counterInterval;
+var blinker;
 
 
 var roundOneArray = [
@@ -76,6 +77,16 @@ var displayImage = function (roundCount) {
 		images.append('<img class="img-rd-1" src='+roundOneArray[roundCount].photo+' />');
 	};
 
+var showBlinker = function () {	
+	 blinker = setInterval(function () {
+		    $('#prompt').fadeOut(500);
+		    $('#prompt').fadeIn(500);
+		}, 1000);
+};
+
+
+
+
 var showTimer = function() {
   var counter = 21;
   
@@ -105,6 +116,7 @@ var showTimer = function() {
 	   buzzedInOne = false;
 	   oneBuzz.empty();
 	   clearInterval(counterInterval);
+	   clearInterval(blinker);
 	   swal("Uh oh...", "Your time has run out.", "error");
 
     }
@@ -143,14 +155,7 @@ var resetGame = function () {
 	playButton.show();
 };
 
-var showBlinker = function () {
-	var blinker = function () {
-	    $('#prompt').fadeOut(500);
-	    $('#prompt').fadeIn(500);
-	}
 
-setInterval(blinker, 1000); 
-};
 
 $(document).ready(function() {
 	shuffle(roundOneArray);
@@ -259,6 +264,8 @@ $(document).ready(function() {
 
 	submit.click(function (event) {
 		clearInterval(counterInterval);
+		clearInterval(blinker);
+		$('#prompt').hide();
 		event.preventDefault();
 		buzzedInOne = false;
 		answerForm.hide();
@@ -295,7 +302,7 @@ $(document).ready(function() {
 
 		} else {
 			console.log('false');
-			swal('Sorry, that\'s incorrect');
+			swal("Sorry, that\'s incorrect", "Maybe next time.", "error");
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
 			roundCount++;
