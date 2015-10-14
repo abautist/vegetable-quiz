@@ -155,11 +155,12 @@ header {
 .keystroke {
 	text-align: center;
 	font-size: 80px;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 	color: yellow;
 	position: absolute;
-	top: 45%;
-	left: 28%;
-	right: 25%;
+	top: 20%;
+	left: 5%;
+	border: 1px solid black;
 }
 
 .answerInput {

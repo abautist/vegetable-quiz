@@ -26,6 +26,7 @@ var oneBuzz = $('#one-buzz');
 var twoBuzz = $('#two-buzz');
 var buzzedInOne = false;
 var scoreBoard = $('.scoreboard');
+var answerInput = $('.answerInput');
 
 var roundOneArray = [
 {photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower'},
@@ -128,6 +129,7 @@ var reset = function () {
 	gameboard.hide();
 	answerForm.hide();
 	keystroke.hide();
+	answerInput.hide();
 	plyrOne.html(score1);
 	plyrTwo.html(score2);
 	playButton.show();
@@ -222,6 +224,7 @@ $(document).ready(function() {
 		jerseys.hide();
 		displayImage(roundCount);
 		keystroke.show();
+		answerInput.show();
 		showTimer();
 	});
 
@@ -236,6 +239,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		buzzedInOne = false;
 		keystroke.empty();
+		answerInput.hide();
 		var playerSubmission = typedGuess.val();
 		// if (typedGuess.val('')) {
 		// 	alert('You have to enter something!')
