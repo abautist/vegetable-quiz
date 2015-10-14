@@ -105,7 +105,7 @@ var showTimer = function() {
 	   buzzedInOne = false;
 	   oneBuzz.empty();
 	   clearInterval(counterInterval);
-	   alert('Time\'s Up!');
+	   swal("Uh oh...", "Your time has run out.", "error");
 
     }
     
@@ -116,11 +116,15 @@ var showTimer = function() {
 //determine winner
 var winner = function(score1,score2) {
 	if (score1 === 3) {
-			swal({   title: 'Player 1 is the winner!',
-			text: "XXX"})
+			swal({   title: "Congratulations!",
+			text: "Player 1 is the winner. Play again?",
+			imageUrl: "images/crown.png"
+		});
 	} else if (score2 === 3) {
 			swal({   title: 'Player 2 is the winner!',
-			text: "XXX"});
+			text: "Player 2 is the winner. Play again?",
+			imageUrl: "images/crown.png"
+		});
 	} else {
 		return;
 	}
@@ -139,6 +143,15 @@ var resetGame = function () {
 	playButton.show();
 };
 
+var showBlinker = function () {
+	var blinker = function () {
+	    $('#prompt').fadeOut(500);
+	    $('#prompt').fadeIn(500);
+	}
+
+setInterval(blinker, 1000); 
+};
+
 $(document).ready(function() {
 	shuffle(roundOneArray);
 	console.log(roundOneArray);
@@ -147,6 +160,7 @@ $(document).ready(function() {
 	scoreBoard.hide();
 	plyrOne.html(score1);
 	plyrTwo.html(score2);
+	$('#prompt').hide();
 	
 
 	$(document).bind('keydown', function(e) {
@@ -187,6 +201,7 @@ $(document).ready(function() {
 		gameboard.fadeIn();
 		scoreBoard.fadeIn();
 		rdOneButton.hide();
+
 	});
 
 	jerseys.click(function() {
@@ -229,6 +244,8 @@ $(document).ready(function() {
 		jerseys.hide();
 		displayImage(roundCount);
 		keystroke.show();
+		$('#prompt').show();
+		showBlinker();
 
 		showTimer();
 	});
@@ -257,7 +274,7 @@ $(document).ready(function() {
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
 			roundCount++;
-			alert('CORRECT!');
+			swal('Nice One!', 'Are you ready for the next one?', 'success');
 			images.empty();
 			rdOneButton.text('NEXT');
 			rdOneButton.show();
@@ -268,7 +285,7 @@ $(document).ready(function() {
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
 			roundCount++;
-			alert('CORRECT!');
+			swal('Nice One!', 'Are you ready for the next one?', 'success');
 			images.empty();
 			rdOneButton.text('NEXT');
 			rdOneButton.show();
@@ -278,7 +295,7 @@ $(document).ready(function() {
 
 		} else {
 			console.log('false');
-			alert('Sorry, that\'s incorrect');
+			swal('Sorry, that\'s incorrect');
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
 			roundCount++;
@@ -289,6 +306,7 @@ $(document).ready(function() {
 	
 		winner(score1, score2);
 		oneBuzz.empty();		
+
 
 	});
 

@@ -20,8 +20,20 @@ header {
 }
 
 #h1-hd {
-	font-size: 120px;
+	font-size: 80px;
 	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	line-height: 95%;
+}
+
+#prompt {
+	border: 1px solid black;
+	position: absolute;
+	top: 40%;
+	left: 10%;
+	right: 10%;
+	font-size: 50px;
+	color: yellow;
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 	line-height: 95%;
 }
@@ -176,6 +188,28 @@ header {
 #answer {
 	border: 1px solid black;
 }
+
+#rd-1-ans, #rd-1-ans:focus {
+	  font-family: 'Amatic SC', cursive;
+	  border: none;
+	  background: white;
+	  font-size: 40px;
+	  width: 400px;
+	  /*cursor*/: 
+}
+
+.submit {
+	background-color: transparent;
+	border: none;
+	color: rgba(206,206,206,0.5);
+}
+
+.submit:hover {
+	color: #00ff00;
+	background-color: transparent;
+	border: none;
+}
+
 
 .scoreboard {
 	font-size: 20px;
