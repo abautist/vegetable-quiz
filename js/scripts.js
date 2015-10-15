@@ -110,7 +110,6 @@ var showTimer = function() {
        answerForm.hide();
        plyrOne.html(score1);
 	   plyrTwo.html(score2);
-	   roundCount++;
 	   images.empty();
 	   rdOneButton.text('NEXT');
 	   rdOneButton.show();
@@ -118,8 +117,8 @@ var showTimer = function() {
 	   oneBuzz.empty();
 	   clearInterval(counterInterval);
 	   clearInterval(blinker);
-	   swal("Uh oh...", "Your time has run out.", "error");
-
+	   swal("Uh oh...", "Your time has run out. The correct answer was "+roundOneArray[roundCount].answer, "error");
+	   roundCount++;
     }
     
   }, 1000);
@@ -198,7 +197,7 @@ $(document).ready(function() {
 
 //How to Play
 	instructions.click(function() {
-		swal("INSTRUCTIONS", "It's the classic guess that vegetable game. A photo will appear and each player must race against the clock to buzz in and type in your answer. Player 1\'s buzzer is the key Q and Player 2\'s buzzer is the key P. Watch for the hints. First to five wins!");
+		swal("INSTRUCTIONS", "It's a classic guessing game with VEGETABLES! A photo will appear and each player must race against the clock to buzz in and type in your answer. Player 1\'s buzzer is the key Q and Player 2\'s buzzer is the key P. Watch for the hints. First to five wins!");
 	})
 
 //Play button
@@ -307,7 +306,7 @@ $(document).ready(function() {
 	
 		winner(score1, score2);
 		oneBuzz.empty();		
-		
+
 	});
 
 });
