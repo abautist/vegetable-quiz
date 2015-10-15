@@ -32,23 +32,23 @@ var blinker;
 
 
 var roundOneArray = [
-{photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower'},
-{photo: 'Vegetables/kohlrabi.jpg', answer: 'kohlrabi'},
-{photo: 'Vegetables/artichoke.jpg', answer: 'artichoke'},
-{photo: 'Vegetables/garlic.jpg', answer: 'garlic'},
-{photo: 'Vegetables/ginger.jpg', answer: 'ginger'},
-{photo: 'Vegetables/savoy-cabbage.jpg', answer: 'cabbage'},
-{photo: 'Vegetables/brussels-sprouts.jpg', answer: 'brussels sprouts'},
-{photo: 'Vegetables/parsnip.jpg', answer: 'parsnip'},
-{photo: 'Vegetables/fennel.jpg', answer: 'fennel'},
-{photo: 'Vegetables/radicchio.jpg', answer: 'radicchio'},
-{photo: 'Vegetables/asparagus.jpg', answer: 'asparagus'},
-{photo: 'Vegetables/kale.jpg', answer: 'kale'},
-{photo: 'Vegetables/tomatoes.jpg', answer: 'tomato'},
-{photo: 'Vegetables/basil.jpg', answer: 'basil'},
-{photo: 'Vegetables/onions.jpg', answer: 'onion'},
-{photo: 'Vegetables/carrot.jpg', answer: 'carrot'},
-{photo: 'Vegetables/broccoli.jpg', answer: 'broccoli'},
+{photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower', hint1: 'two words, first word romanesco', hint2: 'ends with cauliflower'},
+{photo: 'Vegetables/kohlrabi.jpg', answer: 'kohlrabi', hint1: 'starts with a "K" ends with an "I"', hint2: 'rhymes with pohlrabi'},
+{photo: 'Vegetables/artichoke.jpg', answer: 'artichoke', hint1: 'starts with an "A"', hint2: 'ends with choke'},
+{photo: 'Vegetables/garlic.jpg', answer: 'garlic', hint1: 'great in pasta sauce', hint2: 'vampires hate it'},
+{photo: 'Vegetables/ginger.jpg', answer: 'ginger', hint1: 'starts with a "G"', hint2: 'ends with -inger'},
+{photo: 'Vegetables/savoy-cabbage.jpg', answer: 'cabbage', hint1: 'great for coleslaw', hint2: 'something patch kids'},
+{photo: 'Vegetables/brussels-sprouts.jpg', answer: 'brussels sprouts', hint1: 'first word is a city', hint2: 'second word - sprouts'},
+{photo: 'Vegetables/parsnip.jpg', answer: 'parsnip', hint1: 'starts with a P', hint2: 'ends with -arsnip'},
+{photo: 'Vegetables/fennel.jpg', answer: 'fennel', hint1: 'licorice flavor', hint2: 'rhymes with kennel'},
+{photo: 'Vegetables/radicchio.jpg', answer: 'radicchio', hint1: 'tough one.. starts with an "R" ends with an "O"', hint2: 'end with -adicchio'},
+{photo: 'Vegetables/asparagus.jpg', answer: 'asparagus', hint1: 'do you need a hint?', hint2: 'starts with an "A" ends with an "S"'},
+{photo: 'Vegetables/kale.jpg', answer: 'kale', hint1: 'so popular right now', hint2: 'rhymes with fail'},
+{photo: 'Vegetables/tomatoes.jpg', answer: 'tomato', hint1: ' do you need a hint?', hint2: 'do you really need a hint?'},
+{photo: 'Vegetables/basil.jpg', answer: 'basil', hint1: 'mmm... pesto', hint2: 'a popular Italian herb'},
+{photo: 'Vegetables/onions.jpg', answer: 'onion', hint1: 'makes you cry', hint2: 'starts with an O'},
+{photo: 'Vegetables/carrot.jpg', answer: 'carrot', hint1: 'do you really need a hint?', hint2: 'do you really need a hint?'},
+{photo: 'Vegetables/broccoli.jpg', answer: 'broccoli', hint1: 'do you need a hint?', hint2: 'a head of ?'},
 ];
 
 
@@ -72,6 +72,12 @@ var shuffle = function (array) {
 	}
 	return array;
 }
+
+var displayHint = function (roundCount) {
+
+		images.append('<img class="img-rd-1" src='+roundOneArray[roundCount].photo+' />');
+	};
+
 
 var displayImage = function (roundCount) {		
 		images.append('<img class="img-rd-1" src='+roundOneArray[roundCount].photo+' />');
@@ -97,6 +103,12 @@ var showTimer = function() {
     }
     if (counter >= 0 && counter < 10) {
       $('#timer').text('00:0'+counter);
+    }
+    if (counter === 12) { 
+      $('.hint').append('<p>'+roundOneArray[roundCount].hint1+'</p>');
+    }
+    if (counter === 7) {
+      $('.hint').append('<p>'+roundOneArray[roundCount].hint2+'</p>');
     }
     if (counter <= 5) {
       $('#timer').css({'color':'red'});
@@ -133,7 +145,7 @@ var winner = function(score1,score2) {
 			imageUrl: "images/crown.png"
 		});
 	} else if (score2 === 3) {
-			swal({   title: 'Player 2 is the winner!',
+			swal({   title: 'Congratulations!',
 			text: "Player 2 is the winner. Play again?",
 			imageUrl: "images/crown.png"
 		});
@@ -174,7 +186,7 @@ $(document).ready(function() {
 			buzzedInOne = true;
 			answerForm.fadeIn();
 			typedGuess.focus();
-			oneBuzz.text('PLAYER ONE BUZZED IN!');
+			oneBuzz.text('PLAYER ONE BUZZED IN!!!');
 		}
 	});
 
@@ -184,7 +196,7 @@ $(document).ready(function() {
 			buzzedInOne = true;
 			answerForm.fadeIn();
 			typedGuess.focus();
-			oneBuzz.text('PLAYER TWO BUZZED IN!');
+			oneBuzz.text('PLAYER TWO BUZZED IN!!!');
 		}
 	});
 	
@@ -251,8 +263,8 @@ $(document).ready(function() {
 		keystroke.show();
 		$('#prompt').show();
 		showBlinker();
-
 		showTimer();
+		$('.hint').empty();
 	});
 
 	// nextRound.click(function() {
@@ -275,7 +287,7 @@ $(document).ready(function() {
 		// 	alert('You have to enter something!')
 		// } else 
 
-		if (playerSubmission.toLowerCase() === roundOneArray[roundCount].answer && oneBuzz.text() === 'PLAYER ONE BUZZED IN!') {
+		if (playerSubmission.toLowerCase() === roundOneArray[roundCount].answer && oneBuzz.text() === 'PLAYER ONE BUZZED IN!!!') {
 			console.log('true');
 			score1++;
 			plyrOne.html(score1);
@@ -286,7 +298,7 @@ $(document).ready(function() {
 			rdOneButton.text('NEXT');
 			rdOneButton.show();
 
-		} else if (playerSubmission.toLowerCase() === roundOneArray[roundCount].answer && oneBuzz.text() === 'PLAYER TWO BUZZED IN!') {
+		} else if (playerSubmission.toLowerCase() === roundOneArray[roundCount].answer && oneBuzz.text() === 'PLAYER TWO BUZZED IN!!!') {
 			console.log('player2')
 			score2++;
 			plyrOne.html(score1);
@@ -302,7 +314,7 @@ $(document).ready(function() {
 
 		} else {
 			console.log('false');
-			swal("Sorry, that\'s incorrect", "Maybe next time.", "error");
+			swal("Sorry, that\'s incorrect", "The correct answer was "+roundOneArray[roundCount].answer, "error");
 			plyrOne.html(score1);
 			plyrTwo.html(score2);
 			roundCount++;
@@ -318,40 +330,3 @@ $(document).ready(function() {
 	});
 
 });
-
-
-//Host appears with speech bubble with div inside. Please choose your team! Host and speech bubble hides
-
-/*
-
-/buzzer function
-	onclick -
-	show answer input container
-		hover
-		blinking cursor
-	if P1 button clicked -
-		text input = right answer {
-		p1 score++
-		sweet alert good job
-		} else
-		{alert sorry; p1 score--}
-	if P2 button clicked -
-		text input = right answer {
-		p2 score++
-		}	
-
-/In between round 1 and 2; show current score and text - now onto round 2
-
-/Round 2
-
-
-
-
-
-
-/scoreboard + timer
-show scoreboard div with colored sweater icon
-show timer container - if timer hits 0 then answer input container becomes disabled
-
-
-*/
