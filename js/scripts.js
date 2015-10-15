@@ -30,7 +30,6 @@ var answerInput = $('.answerInput');
 var counterInterval;
 var blinker;
 
-
 var roundOneArray = [
 {photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower', hint1: 'two words, first word romanesco', hint2: 'ends with cauliflower'},
 {photo: 'Vegetables/kohlrabi.jpg', answer: 'kohlrabi', hint1: 'starts with a "K" ends with an "I"', hint2: 'rhymes with pohlrabi'},
@@ -51,12 +50,6 @@ var roundOneArray = [
 {photo: 'Vegetables/broccoli.jpg', answer: 'broccoli', hint1: 'do you need a hint?', hint2: 'a head of ?'},
 ];
 
-
-//When page loads the title enters from the left
-//Replace jerseys with colored tags - http://fortawesome.github.io/Font-Awesome/icon/tag/
-//add text "Please select your team's jersey"
-// possible add it into an accordian + add progress bar
-
 //Shuffle the tiles using the Fisher-Yates method
 
 var shuffle = function (array) {
@@ -74,10 +67,8 @@ var shuffle = function (array) {
 }
 
 var displayHint = function (roundCount) {
-
 		images.append('<img class="img-rd-1" src='+roundOneArray[roundCount].photo+' />');
 	};
-
 
 var displayImage = function (roundCount) {		
 		images.append('<img class="img-rd-1" src='+roundOneArray[roundCount].photo+' />');
@@ -89,9 +80,6 @@ var showBlinker = function () {
 		    $('#prompt').fadeIn(500);
 		}, 1000);
 };
-
-
-
 
 var showTimer = function() {
   var counter = 21;
@@ -113,10 +101,6 @@ var showTimer = function() {
     if (counter <= 5) {
       $('#timer').css({'color':'red'});
     }
-    // // if (counter > 0 && oneBuzz.html('PLAYER ONE BUZZED IN!')) {
-    // //   clearInterval(counter);
-
-    // }
     if (counter === 0) {
        answerForm.hide();
        plyrOne.html(score1);
@@ -159,15 +143,25 @@ var resetGame = function () {
 	shuffle(roundOneArray);
 	console.log(roundOneArray);
 	gameboard.hide();
+	scoreBoard.hide();
 	answerForm.hide();
 	keystroke.hide();
 	answerForm.hide();
-	plyrOne.html(score1);
-	plyrTwo.html(score2);
+	plyrOne.empty();
+	plyrTwo.empty();
+	score1 = 0;
+	score2 = 0;
+	playerOneIcon.empty();
+	playerTwoIcon.empty();
+	rdOneButton.text('GO');
+	clickable = false;
+	redClickable = false;
 	playButton.show();
 };
 
 
+var clickable = false;
+var redClickable = false;
 
 $(document).ready(function() {
 	shuffle(roundOneArray);
@@ -199,59 +193,54 @@ $(document).ready(function() {
 			oneBuzz.text('PLAYER TWO BUZZED IN!!!');
 		}
 	});
-	
-
-
-	//make sure you can't activate p buzzer when typing in answer
-
-	// $(function() {
- //    	var BV = new $.BigVideo();
- //    	BV.init();
- //    	BV.show('http://archive.org/download/BrightSkyAndClouds/SkyAndCloudsh264.mp4',{ambient:true});
-	// });
-
-	// header.hide();
 
 	playButton.click(function() {
-//tried to hide BV with BV.hide() but didn't work
 		playButton.hide();
 		gameboard.fadeIn();
 		scoreBoard.fadeIn();
+		jerseys.fadeIn();
 		rdOneButton.hide();
 
 	});
 
 	jerseys.click(function() {
 		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
-    		// jerseys.hide();
     		rdOneButton.fadeIn('slow');
 		}
-//set delay for jersey hide - buggy - will hide
 	});
 
-	blueTeam.one('click', function() {
-		//can't figure out how to make the 'img' more specific and why the html is '' when i place an image there
-		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
-			return;			
-		} else if (playerOneIcon.html() == '') {
-			playerOneIcon.append('<img src="pictures/blue.png" />');
-			$('img').css({'width': '50px', 'height': '50px'});
-		} else {
-			playerTwoIcon.append('<img src="pictures/blue.png" />');
-			$('img').css({'width': '50px', 'height': '50px'});
-		}
+
+
+	blueTeam.click(function() {
+		if (clickable === false) {
+			if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
+				return;			
+			} else if (playerOneIcon.html() == '') {
+				playerOneIcon.append('<img src="pictures/blue.png" />');
+				$('img').css({'width': '50px', 'height': '50px'});
+			} else {
+				playerTwoIcon.append('<img src="pictures/blue.png" />');
+				$('img').css({'width': '50px', 'height': '50px'});
+			}
+			clickable = true;
+		};
 	});
 
-	redTeam.one('click', function() {
-		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
-			return;	
-		} else if (playerOneIcon.html() == '') {
-			playerOneIcon.append('<img src="pictures/red.png" />');
-			$('img').css({'width': '50px', 'height': '50px'});
-		} else {
-			playerTwoIcon.append('<img src="pictures/red.png" />');
-			$('img').css({'width': '50px', 'height': '50px'});
-		}
+
+
+	redTeam.click(function() {
+		if (redClickable === false) {
+			if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
+				return;	
+			} else if (playerOneIcon.html() == '') {
+				playerOneIcon.append('<img src="pictures/red.png" />');
+				$('img').css({'width': '50px', 'height': '50px'});
+			} else {
+				playerTwoIcon.append('<img src="pictures/red.png" />');
+				$('img').css({'width': '50px', 'height': '50px'});
+			}
+			redClickable = true;	
+		};
 	});
 
 	
