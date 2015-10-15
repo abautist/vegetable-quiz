@@ -1,11 +1,10 @@
 var gameboard = $('.gameboard');
 var header = $('header');
+var prompt = $('#prompt');
 var h1 = $('#h1-hd');
 var playButton = $('#play');
 var blueTeam = $('#choice-one');
 var redTeam = $('#choice-two');
-var blueTeamIcon = "pictures/blue-football-top-md.png";
-var redTeamIcon = "pictures/red-t-shirt-icon-hi.png";
 var playerOneIcon = $('#player1icon');
 var playerTwoIcon = $('#player2icon');
 var buttonSwitch = $('#firstRd');
@@ -29,6 +28,9 @@ var scoreBoard = $('.scoreboard');
 var answerInput = $('.answerInput');
 var counterInterval;
 var blinker;
+var instructions = $('#mid-margin');
+var clickable = false;
+var redClickable = false;
 
 var roundOneArray = [
 {photo: 'Vegetables/romanesco.jpg', answer: 'romanesco cauliflower', hint1: 'two words, first word romanesco', hint2: 'ends with cauliflower'},
@@ -50,8 +52,7 @@ var roundOneArray = [
 {photo: 'Vegetables/broccoli.jpg', answer: 'broccoli', hint1: 'do you need a hint?', hint2: 'a head of ?'},
 ];
 
-//Shuffle the tiles using the Fisher-Yates method
-
+//Shuffle the images using the Fisher-Yates method
 var shuffle = function (array) {
 	var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -66,21 +67,25 @@ var shuffle = function (array) {
 	return array;
 }
 
+//Display hint
 var displayHint = function (roundCount) {
 		images.append('<img class="img-rd-1" src='+roundOneArray[roundCount].photo+' />');
 	};
 
+//Display vegetable image
 var displayImage = function (roundCount) {		
 		images.append('<img class="img-rd-1" src='+roundOneArray[roundCount].photo+' />');
 	};
 
+//Question prompt flashes
 var showBlinker = function () {	
 	 blinker = setInterval(function () {
-		    $('#prompt').fadeOut(500);
-		    $('#prompt').fadeIn(500);
+		    prompt.fadeOut(500);
+		   prompt.fadeIn(500);
 		}, 1000);
 };
 
+//Countdown timer + hint display timing + timer turns red with 5 seconds left
 var showTimer = function() {
   var counter = 21;
   
@@ -93,10 +98,10 @@ var showTimer = function() {
       $('#timer').text('00:0'+counter);
     }
     if (counter === 12) { 
-      $('.hint').append('<p>'+roundOneArray[roundCount].hint1+'</p>');
+      $('.hint').append('<li>'+roundOneArray[roundCount].hint1+'</li>');
     }
     if (counter === 7) {
-      $('.hint').append('<p>'+roundOneArray[roundCount].hint2+'</p>');
+      $('.hint').append('<li>'+roundOneArray[roundCount].hint2+'</li>');
     }
     if (counter <= 5) {
       $('#timer').css({'color':'red'});
@@ -121,14 +126,14 @@ var showTimer = function() {
     
 };
 
-//determine winner
+//Winner 
 var winner = function(score1,score2) {
-	if (score1 === 3) {
+	if (score1 === 5) {
 			swal({   title: "Congratulations!",
 			text: "Player 1 is the winner. Play again?",
 			imageUrl: "images/crown.png"
 		});
-	} else if (score2 === 3) {
+	} else if (score2 === 5) {
 			swal({   title: 'Congratulations!',
 			text: "Player 2 is the winner. Play again?",
 			imageUrl: "images/crown.png"
@@ -139,6 +144,7 @@ var winner = function(score1,score2) {
 	resetGame();
 };
 
+//Reset and start new game
 var resetGame = function () {
 	shuffle(roundOneArray);
 	console.log(roundOneArray);
@@ -159,10 +165,6 @@ var resetGame = function () {
 	playButton.show();
 };
 
-
-var clickable = false;
-var redClickable = false;
-
 $(document).ready(function() {
 	shuffle(roundOneArray);
 	console.log(roundOneArray);
@@ -171,9 +173,9 @@ $(document).ready(function() {
 	scoreBoard.hide();
 	plyrOne.html(score1);
 	plyrTwo.html(score2);
-	$('#prompt').hide();
-	
+	prompt.hide();
 
+//Establishes buzzers	
 	$(document).bind('keydown', function(e) {
 		if (e.keyCode == 81 && buzzedInOne == false) {
 			e.preventDefault();
@@ -194,6 +196,12 @@ $(document).ready(function() {
 		}
 	});
 
+//How to Play
+	instructions.click(function() {
+		swal("INSTRUCTIONS", "It's the classic guess that vegetable game. A photo will appear and each player must race against the clock to buzz in and type in your answer. Player 1\'s buzzer is the key Q and Player 2\'s buzzer is the key P. Watch for the hints. First to five wins!");
+	})
+
+//Play button
 	playButton.click(function() {
 		playButton.hide();
 		gameboard.fadeIn();
@@ -203,13 +211,12 @@ $(document).ready(function() {
 
 	});
 
+//Select teams
 	jerseys.click(function() {
 		if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
     		rdOneButton.fadeIn('slow');
 		}
 	});
-
-
 
 	blueTeam.click(function() {
 		if (clickable === false) {
@@ -226,8 +233,6 @@ $(document).ready(function() {
 		};
 	});
 
-
-
 	redTeam.click(function() {
 		if (redClickable === false) {
 			if (playerOneIcon.html() != '' && playerTwoIcon.html() != '') {
@@ -243,39 +248,30 @@ $(document).ready(function() {
 		};
 	});
 
-	
+//Starts the round	
 	rdOneButton.click(function() {
 		$('#timer').css({'color':'white'});
 		rdOneButton.hide();
 		jerseys.hide();
 		displayImage(roundCount);
 		keystroke.show();
-		$('#prompt').show();
+		prompt.show();
 		showBlinker();
 		showTimer();
 		$('.hint').empty();
 	});
 
-	// nextRound.click(function() {
-
-	// })
-
-
-//set the value of the typedGuess - typedGuess.val('') is messing up the function
-
+//Type in answer and execute solution submit function
 	submit.click(function (event) {
 		clearInterval(counterInterval);
 		clearInterval(blinker);
-		$('#prompt').hide();
+		prompt.hide();
 		event.preventDefault();
 		buzzedInOne = false;
 		answerForm.hide();
 		var playerSubmission = typedGuess.val();
 		typedGuess.val('');
-		// if (typedGuess.val('')) {
-		// 	alert('You have to enter something!')
-		// } else 
-
+		
 		if (playerSubmission.toLowerCase() === roundOneArray[roundCount].answer && oneBuzz.text() === 'PLAYER ONE BUZZED IN!!!') {
 			console.log('true');
 			score1++;
@@ -298,9 +294,6 @@ $(document).ready(function() {
 			rdOneButton.text('NEXT');
 			rdOneButton.show();
 
-			//change to sweet alert
-			//add alternate answer and a you're pretty close alert
-
 		} else {
 			console.log('false');
 			swal("Sorry, that\'s incorrect", "The correct answer was "+roundOneArray[roundCount].answer, "error");
@@ -314,8 +307,7 @@ $(document).ready(function() {
 	
 		winner(score1, score2);
 		oneBuzz.empty();		
-
-
+		
 	});
 
 });

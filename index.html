@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Title Page</title>
+	<title>The World Famous Vegetable Challenge</title>
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
@@ -9,10 +9,8 @@
 	<link rel="stylesheet" type="text/css" href="css/sweetalert.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	<link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>
-	<title></title>
 </head>
 <body>
-	<nav></nav>
 	<header>
 		<h1 id="h1-hd">The World Famous Vegetable Challenge</h1>
 		<h3 id="prompt">Buzz in and Name <strong><u>THIS</u></strong> Vegetable</h3>
@@ -39,7 +37,9 @@
 	<div class="keystroke">
 		<p id="one-buzz"></p>
 	</div>	
-	<div class="hint"></div>
+	<div>
+		<ul class="hint"></ul>
+	</div>
 	<div class="answerInput">
 		<form id="answer">
 			<input id="rd-1-ans" type="text" onfocus="this.value='';" placeholder="The name of this vegetable is..." autocomplete="off" />
@@ -60,11 +60,13 @@
 			<div class="score-second-row" id="player2icon"></div>
 			<div id="player2score"></div>
 		</div>
-		<div id="howToPlay"></div>
 	</div>
 
-
-	<footer></footer>
+	<div id="howToPlay">
+		<span>Player 1 Buzzer = <strong>Q</strong></span>
+		<span id="mid-margin">How To Play</span>
+		<span>Player 2 Buzzer = <strong>P</strong></span>
+	</div>
 	<script type="text/javascript" src="js/scripts.js"></script>
 </body>
 </html>
